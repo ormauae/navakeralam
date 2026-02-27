@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Share2, Download, Search, CheckCircle2, Building2, X, ExternalLink, Play } from 'lucide-react';
+import departmentsData from '@/data/departments.json';
+import statsData from '@/data/stats.json';
 import * as Dialog from '@radix-ui/react-dialog';
 
 interface Achievement {
@@ -23,364 +25,35 @@ interface Department {
   id: string;
   name: string;
   icon: string;
-  count: number;
   color: string;
   achievements: Achievement[];
 }
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('എല്ലാം (All)');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+  const departments: Department[] = departmentsData as Department[];
+
   const categories = [
     { id: 'all', label: 'എല്ലാം (All)', icon: '📋' },
-    { id: 'health', label: '🏥 ആരോഗ്യ വകുപ്പ്', icon: '🏥' },
-    { id: 'education', label: '🎓 സാമൂഹ്യ വകുപ്പ്', icon: '🎓' },
-    { id: 'welfare', label: '🏛️ ക്ഷേമ വകുപ്പ്', icon: '🏛️' },
-    { id: 'finance', label: '💰 പേയ്മെന്റ്സ് വകുപ്പ്', icon: '💰' },
-    { id: 'other', label: '⚡ കോൺഫിൽ വകുപ്പ്', icon: '⚡' },
-    { id: 'agriculture', label: '🌾 ആരോഗ്യ വകുപ്പ്', icon: '🌾' },
+    ...departments.map(dept => ({ id: dept.id, label: dept.name, icon: dept.icon })),
   ];
 
-  const stats = [
-    { label: 'വകുപ്പുകൾ', value: '6', color: 'from-emerald-500 to-emerald-600' },
-    { label: 'നേട്ടങ്ങൾ', value: '80+', color: 'from-blue-500 to-blue-600' },
-    { label: 'വിവേദ്യന്ന്', value: '₹5,000Cr+', color: 'from-orange-500 to-orange-600' },
-    { label: 'സാമന്തു ചിലേഷ്മു', value: '₹7,708Cr', color: 'from-purple-500 to-purple-600' },
-    { label: 'ദേശീയ പുനസ്ഥാപനങ്ങൾ', value: '32', color: 'from-pink-500 to-pink-600' },
-    { label: 'തൊഴിലാസനങ്ങൾ', value: '5L+', color: 'from-teal-500 to-teal-600' },
-  ];
+  const stats = statsData;
 
-  const departments: Department[] = [
-    {
-      id: 'health',
-      name: 'ആരോഗ്യ വകുപ്പ്',
-      icon: '🏥',
-      count: 14,
-      color: 'from-red-500 to-pink-500',
-      achievements: [
-        {
-          id: '1',
-          title: 'പുതിയ മെഡിക്കൽ കോളേജുകൾ',
-          description: 'പത്തനംതിട്ട, ഇടുക്കി, വയനാട്, കാസർഗോഡ് എന്നീ ജില്ലകളിൽ പുതിയ മെഡിക്കൽ കോളേജുകൾ സ്ഥാപിച്ചു',
-          tags: ['വിവരുദ്യന്ന്', 'ആരോഗ്യം'],
-          icon: '🏥',
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1683792337566-e305745c15ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3NwaXRhbCUyMG1lZGljYWwlMjBjb2xsZWdlJTIwaW5kaWF8ZW58MXx8fHwxNzcyMTIwNTE3fDA&ixlib=rb-4.1.0&q=80&w=1080',
-          detailedReport: {
-            fullDescription: 'കേരളത്തിലെ എല്ലാ ജില്ലകളിൽ മെഡിക്കൽ കോളേജ് സൗകര്യം ലഭ്യമാക്കുക എന്ന ലക്ഷ്യത്തോടെ പത്തനംതിട്ട, ഇടുക്കി, വയനാട്, കാസർഗോഡ് എന്നീ ജില്ലകളിൽ നാല് പുതിയ മെഡിക്കൽ കോളേജുകൾ സ്ഥാപിച്ചു. ഓരോ കോളേജിലും 100 MBBS സീറ്റുകൾ ലഭ്യമാണ്. അത്യാധുനിക അടിസ്ഥാന സൗകര്യങ്ങളും അനുബന്ധ ആശുപത്രികളും സജ്ജമാക്കിയിട്ടുണ്ട്.',
-            statistics: [
-              { label: 'പുതിയ കോളേജുകൾ', value: '4' },
-              { label: 'MBBS സീറ്റുകൾ', value: '400' },
-              { label: 'നിക്ഷേപം', value: '₹1,200 കോടി' },
-              { label: 'തൊഴിലവസരങ്ങൾ', value: '2,000+' },
-            ],
-            links: [
-              { label: 'ആരോഗ്യ വകുപ്പ് വെബ്സൈറ്റ്', url: 'https://dhs.kerala.gov.in' },
-              { label: 'അപേക്ഷ സമർപ്പിക്കുക', url: '#' },
-              { label: 'പൂർണ്ണ റിപ്പോർട്ട് PDF', url: '#' },
-            ],
-            additionalInfo: [
-              'എല്ലാ കോളേജുകളിലും അത്യാധുനിക ലബോറട്ടറികളും സിമുലേഷൻ സെന്ററുകളും ഉണ്ട്',
-              'പ്രാദേശിക ജനങ്ങൾക്ക് മെഡിക്കൽ വിദ്യാഭ്യാസത്തിന് കൂടുതൽ അവസരങ്ങൾ',
-              'സംസ്ഥാനത്തെ മെഡിക്കൽ വിദ്യാഭ്യാസത്തിന്റെ നിലവാരം ഉയർത്തുന്നു',
-              'അനുബന്ധ ആശുപത്രികളിലൂടെ പ്രാദേശിക ആരോഗ്യ സേവനം മെച്ചപ്പെടുത്തുന്നു',
-            ],
-          },
-        },
-        {
-          id: '2',
-          title: '21 നഴ്സിംഗ് കോളേജുകൾ',
-          description: 'സർക്കാർ/അനുബന്ധ മേഖലയിൽ 21 നഴ്സിംഗ് കോളേജുകൾ സ്ഥാപിച്ചു',
-          tags: ['വിവരുദ്യന്ന്'],
-          icon: '🏥',
-          highlighted: true,
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1659353888906-adb3e0041693?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxudXJzaW5nJTIwY29sbGVnZSUyMHN0dWRlbnRzJTIwaGVhbHRoY2FyZSUyMHRyYWluaW5nfGVufDF8fHx8MTc3MjEyNTc3NXww&ixlib=rb-4.1.0&q=80&w=1080',
-          detailedReport: {
-            fullDescription: 'കേരളത്തിൽ നഴ്സിംഗ് വിദ്യാഭ്യാസത്തിന് കൂടുതൽ അവസരങ്ങൾ സൃഷ്ടിക്കുന്നതിനായി 21 പുതിയ നഴ്സിംഗ് കോളേജുകൾ സ്ഥാപിച്ചു. BSc നഴ്സിംഗ് സീറ്റുകൾ 478-ൽ നിന്ന് 1,060 ആയി വർധിപ്പിച്ചു. സ്ത്രീകൾക്ക് കൂടുതൽ തൊഴിലവസരങ്ങൾ സൃഷ്ടിക്കുന്നതിനും ആരോഗ്യ മേഖലയിൽ കാര്യക്ഷമത വർധിപ്പിക്കുന്നതിനും ഈ സംരംഭം സഹായകമായി.',
-            statistics: [
-              { label: 'പുതിയ കോളേജുകൾ', value: '21' },
-              { label: 'BSc നഴ്സിംഗ് സീറ്റുകൾ', value: '1,060' },
-              { label: 'വാർഷിക വിദ്യാർത്ഥികൾ', value: '3,180' },
-              { label: 'തൊഴിലവസരങ്ങൾ', value: '1,500+' },
-            ],
-            links: [
-              { label: 'നഴ്സിംഗ് കൗൺസിൽ വെബ്സൈറ്റ്', url: '#' },
-              { label: 'പ്രവേശന വിവരങ്ങൾ', url: '#' },
-            ],
-            additionalInfo: [
-              'സർക്കാർ, സ്വയംഭരണ സ്ഥാപനങ്ങളിൽ തുല്യ അവസരം',
-              'കുറഞ്ഞ ഫീസ് ഘടനയിൽ ഗുണമേന്മയുള്ള വിദ്യാഭ്യാസം',
-              'ആധുനിക പരിശീലന സൗകര്യങ്ങൾ',
-            ],
-          },
-        },
-        {
-          id: '3',
-          title: 'ശിശുമരണ നിരക്ക് - വികസിത രാജ്യങ്ങളെക്കാൾ മികച്ചത്',
-          description: 'കേരളത്തിലെ ശിശുമരണ നിരക്ക് (5) യുഎസിനേക്കാൾ കുറവ്',
-          tags: ['ആരോഗ്യം', 'ദേശീയ അംഗീകാരം'],
-          icon: '🏥',
-          mediaType: 'video',
-          mediaUrl: 'https://i.ytimg.com/vi/9bZkp7q19f0/maxresdefault.jpg',
-        },
-        {
-          id: '4',
-          title: 'സൗജന്യ ചികിത്സ - കർധക പദ്ധതി',
-          description: '₹7,708 കോടി രൂപയുടെ സൗജന്യ ചികിത്സ നൽകി',
-          tags: ['ആരോഗ്യം'],
-          icon: '🏥',
-          detailedReport: {
-            fullDescription: 'കേരള സർക്കാരിന്റെ കർധക പദ്ധതിയിലൂടെ ദരിദ്രരായ രോഗികൾക്ക് സൗജന്യ വൈദ്യ ചികിത്സ നൽകുന്നു. സർക്കാർ, സ്വകാര്യ ആശുപത്രികളിൽ നിന്നും ഉയർന്ന നിലവാരമുള്ള ചികിത്സ ലഭിക്കുന്നു. ഇതുവരെ ₹7,708 കോടി രൂപയുടെ സൗജന്യ ചികിത്സ നൽകിയിട്ടുണ്ട്.',
-            statistics: [
-              { label: 'മൊത്തം തുക', value: '₹7,708 കോടി' },
-              { label: 'പ്രയോജനം നേടിയവർ', value: '25 ലക്ഷം+' },
-              { label: 'ആശുപത്രികൾ', value: '850+' },
-              { label: 'ചികിത്സകൾ', value: '50 ലക്ഷം+' },
-            ],
-            links: [
-              { label: 'കർധക പോർട്ടൽ', url: '#' },
-              { label: 'അപേക്ഷ സമർപ്പിക്കുക', url: '#' },
-            ],
-            additionalInfo: [
-              'കാൻസർ, ഹൃദ്രോഗം, വൃക്ക രോഗങ്ങൾക്ക് സൗജന്യ ചികിത്സ',
-              'സർക്കാർ, എംപാനൽഡ് സ്വകാര്യ ആശുപത്രികളിൽ',
-              'ദരിദ്രരായ എല്ലാ കുടുംബങ്ങൾക്കും ലഭ്യം',
-            ],
-          },
-        },
-        {
-          id: '5',
-          title: 'സൗജന്യ മരുന്നുകൾ',
-          description: 'KSSSCL വഴി ₹3,300+ കോടി രൂപയുടെ സൗജന്യ മരുന്നുകൾ',
-          tags: ['ആരോഗ്യം'],
-          icon: '🏥',
-        },
-        {
-          id: '6',
-          title: 'ജനക്കിയ ആരോഗ്യ കേന്ദ്രങ്ങൾ',
-          description: 'സംസ്ഥാനത്തുടനീളം 5,415 കേന്ദ്രങ്ങൾ പ്രവർത്തിക്കുന്നു',
-          tags: ['ആരോഗ്യം'],
-          icon: '🏥',
-        },
-      ]
-    },
-    {
-      id: 'education',
-      name: 'വിദ്യാഭ്യാസ വകുപ്പ്',
-      icon: '🎓',
-      count: 12,
-      color: 'from-blue-500 to-indigo-500',
-      achievements: [
-        {
-          id: 'e1',
-          title: 'സ്മാർട്ട് ക്ലാസ്‌റൂമുകൾ',
-          description: 'സംസ്ഥാനത്തെ 15,000+ സർക്കാർ സ്കൂളുകളിൽ സ്മാർട്ട് ക്ലാസ്‌റൂമുകൾ',
-          tags: ['ഡിജിറ്റൽ', 'വിദ്യാഭ്യാസം'],
-          icon: '🎓',
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1758270704534-fd9715bffc0e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbWFydCUyMGNsYXNzcm9vbSUyMGRpZ2l0YWwlMjBlZHVjYXRpb258ZW58MXx8fHwxNzcyMTIwNTE5fDA&ixlib=rb-4.1.0&q=80&w=1080',
-          detailedReport: {
-            fullDescription: 'കേരളത്തിലെ സർക്കാർ സ്കൂളുകളിൽ വിദ്യാഭ്യാസത്തിന്റെ നിലവാരം ഉയർത്തുന്നതിനായി 15,000-ലധികം സ്മാർട്ട് ക്ലാസ്‌റൂമുകൾ സ്ഥാപിച്ചു. ഹൈ-ടെക് ഉപകരണങ്ങൾ, ഇന്ററാക്ടീവ് ബോർഡുകൾ, മൾട്ടിമീഡിയ പ്രൊജക്ടറുകൾ എന്നിവ ഉപയോഗിച്ച് വിദ്യാർത്ഥികൾക്ക് ആധുനിക പഠന അനുഭവം നൽകുന്നു.',
-            statistics: [
-              { label: 'സ്മാർട്ട് ക്ലാസ്‌റൂമുകൾ', value: '15,000+' },
-              { label: 'പ്രയോജനം നേടുന്ന വിദ്യാർത്ഥികൾ', value: '45 ലക്ഷം' },
-              { label: 'നിക്ഷേപം', value: '₹750 കോടി' },
-              { label: 'പരിശീലനം നേടിയ അധ്യാപകർ', value: '75,000' },
-            ],
-            links: [
-              { label: 'KITE - വിദ്യാഭ്യാസ സാങ്കേതിക വകുപ്പ്', url: 'https://kite.kerala.gov.in' },
-              { label: 'VICTERS ചാനൽ', url: '#' },
-            ],
-            additionalInfo: [
-              'എല്ലാ സർക്കാർ, എയ്ഡഡ് സ്കൂളുകളിലും സ്മാർട്ട് ക്ലാസ്‌റൂമുകൾ',
-              'ഡിജിറ്റൽ കോൺടെന്റ് സംസ്ഥാന സിലബസിനനുസരിച്ച് തയ്യാറാക്കിയത്',
-              'അധ്യാപകർക്ക് സമഗ്ര പരിശീലനം നൽകിയിട്ടുണ്ട്',
-            ],
-          },
-        },
-        {
-          id: 'e2',
-          title: 'സൗജന്യ ലാപ്‌ടോപ്പുകൾ',
-          description: '2.5 ലക്ഷം വിദ്യാർത്ഥികൾക്ക് സൗജന്യ ലാപ്‌ടോപ്പുകൾ വിതരണം',
-          tags: ['വിദ്യാഭ്യാസം', 'ഡിജിറ്റൽ'],
-          icon: '💻',
-          highlighted: true,
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1771408427146-09be9a1d4535?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGxhcHRvcCUyMGNvbXB1dGVyJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyMTIwNTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'e3',
-          title: 'പുതിയ സർവകലാശാലകൾ',
-          description: 'കായികം, ഡിജിറ്റൽ, ഹെൽത്ത് സയൻസ് സർവകലാശാലകൾ സ്ഥാപിച്ചു',
-          tags: ['വിദ്യാഭ്യാസം', 'ആദ്യമായി'],
-          icon: '🏛️',
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1631599143424-5bc234fbebf1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwY2FtcHVzJTIwYnVpbGRpbmd8ZW58MXx8fHwxNzcyMDQ1OTQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'e4',
-          title: 'സൗജന്യ പാഠപുസ്തകങ്ങൾ',
-          description: 'എല്ലാ സർക്കാർ സ്കൂൾ വിദ്യാർത്ഥികൾക്കും സൗജന്യ പാഠപുസ്തകങ്ങൾ',
-          tags: ['വിദ്യാഭ്യാസം'],
-          icon: '📚',
-        },
-        {
-          id: 'e5',
-          title: 'KITE VICTERS - ഇ-ലേണിംഗ്',
-          description: 'ഓൺലൈൻ വിദ്യാഭ്യാസത്തിനുള്ള സമഗ്ര പ്ലാറ്റ്‌ഫോം',
-          tags: ['ഡിജിറ്റൽ', 'വിദ്യാഭ്യാസം'],
-          icon: '📡',
-        },
-        {
-          id: 'e6',
-          title: 'വിദ്യാഭ്യാസ സ്‌കോളർഷിപ്പ്',
-          description: '₹850 കോടി രൂപ വിദ്യാർത്ഥികൾക്ക് സ്‌കോളർഷിപ്പായി നൽകി',
-          tags: ['വിദ്യാഭ്യാസം', 'സഹായം'],
-          icon: '🎓',
-        },
-      ]
-    },
-    {
-      id: 'welfare',
-      name: 'സാമൂഹ്യ ക്ഷേമ വകുപ്പ്',
-      icon: '🤝',
-      count: 10,
-      color: 'from-purple-500 to-pink-500',
-      achievements: [
-        {
-          id: 'w1',
-          title: 'സാമൂഹ്യ പെൻഷൻ',
-          description: '60 ലക്ഷം പ്രായമായവർ, വിധവകൾ, വികലാംഗർക്ക് പെൻഷൻ',
-          tags: ['ക്ഷേമം', 'സഹായം'],
-          icon: '👴',
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1598286987849-41663a539ff9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGRlcmx5JTIwcGVuc2lvbiUyMHdlbGZhcmUlMjBzdXBwb3J0fGVufDF8fHx8MTc3MjEyMDUyMHww&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'w2',
-          title: 'കുടുംബശ്രീ',
-          description: '45 ലക്��ം വനിതാ സ്വയം സഹായ സംഘങ്ങളിലെ അംഗങ്ങൾ',
-          tags: ['ക്ഷേമം', 'തൊഴിൽ'],
-          icon: '👩‍🤝‍👩',
-          highlighted: true,
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1568680328385-4d5d41a69eee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21lbiUyMHNlbGYlMjBoZWxwJTIwZ3JvdXAlMjBjb21tdW5pdHl8ZW58MXx8fHwxNzcyMTIwNTIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'w3',
-          title: 'ലൈഫ് മിഷൻ',
-          description: '4.5 ലക്ഷം ഭവനരഹിതർക്ക് വീടുകൾ നിർമ്മിച്ചു നൽകി',
-          tags: ['ഭവനം', 'ക്ഷേമം'],
-          icon: '🏠',
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1687079661069-ad6feb6b3c18?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuZXclMjBob3VzZSUyMGhvbWUlMjBjb25zdHJ1Y3Rpb258ZW58MXx8fHwxNzcyMTIwNTIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'w4',
-          title: 'അഞ്ചനവാടികൾ',
-          description: '5,500+ കുട്ടികളുടെ പോഷകാഹാര കേന്ദ്രങ്ങൾ',
-          tags: ['ക്ഷേമം', 'കുട്ടികൾ'],
-          icon: '👶',
-        },
-        {
-          id: 'w5',
-          title: 'അന്നപൂർണ്ണ കാന്റീനുകൾ',
-          description: '₹20 വില താങ്ങാനാവുന്ന ഗുണമേന്മയുള്ള ഭക്ഷണം',
-          tags: ['ക്ഷേമം', 'ആരോഗ്യം'],
-          icon: '🍽️',
-        },
-        {
-          id: 'w6',
-          title: 'വികലാംഗ പെൻഷൻ',
-          description: 'വികലാംഗർക്ക് ₹1,600 പ്രതിമാസ പെൻഷൻ',
-          tags: ['ക്ഷേമം', 'സഹായം'],
-          icon: '♿',
-        },
-      ]
-    },
-    {
-      id: 'agriculture',
-      name: 'കൃഷി വകുപ്പ്',
-      icon: '🌾',
-      count: 8,
-      color: 'from-green-500 to-emerald-500',
-      achievements: [
-        {
-          id: 'a1',
-          title: 'ജൈവകൃഷി',
-          description: '1 ലക്ഷം ഹെക്ടർ ജൈവകൃഷി വിസ്തീർണ്ണം വർധിപ്പിച്ചു',
-          tags: ['കൃഷി', 'പരിസ്ഥിതി'],
-          icon: '🌱',
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1543416198-249beb35642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwZmFybWluZyUyMGFncmljdWx0dXJlJTIwZ3JlZW58ZW58MXx8fHwxNzcyMTIwNTIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'a2',
-          title: 'കർഷക ക്ഷേമനിധി',
-          description: '₹2,000 കോടി കർഷകർക്ക് സാമ്പത്തിക സഹായം',
-          tags: ['കൃഷി', 'സഹായം'],
-          icon: '👨‍🌾',
-          highlighted: true,
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1707721691170-bf913a7a6231?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXJtZXIlMjBmaWVsZCUyMGluZGlhJTIwYWdyaWN1bHR1cmV8ZW58MXx8fHwxNzcyMTIwNTIyfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'a3',
-          title: 'കമ്മ്യൂണിറ്റി കിച്ചണുകൾ',
-          description: '1,000+ പ്രാദേശിക കാർഷിക ഉൽപന്നങ്ങൾ വിൽക്കുന്ന കേന്ദ്രങ്ങൾ',
-          tags: ['കൃഷി', 'വിവരുദ്യന്ന്'],
-          icon: '🏪',
-          mediaType: 'image',
-          mediaUrl: 'https://images.unsplash.com/photo-1761926972175-b3302536506f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb2NhbCUyMG1hcmtldCUyMHZlZ2V0YWJsZSUyMHByb2R1Y2V8ZW58MXx8fHwxNzcyMTIwNTIyfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        },
-        {
-          id: 'a4',
-          title: 'കാർഷിക സബ്സിഡി',
-          description: '₹500 കോടി കാർഷിക ഉപകരണങ്ങൾക്ക് സബ്സിഡി',
-          tags: ['കൃഷി'],
-          icon: '🚜',
-        },
-        {
-          id: 'a5',
-          title: 'ജലസേചന പദ്ധതികൾ',
-          description: '250 പുതിയ ജലസേചന പദ്ധതികൾ നടപ്പാക്കി',
-          tags: ['കൃഷി', 'വികസനം'],
-          icon: '💧',
-        },
-        {
-          id: 'a6',
-          title: 'കീടനാശിനി രഹിത കൃഷി',
-          description: '50,000 ഹെക്ടർ കീടനാശിനി രഹിത കൃഷി പ്രോത്സാഹിപ്പിച്ചു',
-          tags: ['കൃഷി', 'ആരോഗ്യം'],
-          icon: '🌿',
-        },
-      ]
-    },
-  ];
-
-  const filterTags = [
-    'ആദ്യമായി',
-    'ദേശീയ അംഗീകാരം',
-    'കേന്ദ്രം',
-    'വികസനം',
-    'ഡിജിറ്റൽ',
-    'ആരോഗ്യം',
-    'തൊഴിൽ',
-    'വിവരുദ്യന്ന്',
-    'കൃഷി',
-    'യുവജനം',
-    'സഹ���യം',
-    'ഗതാഗതം',
-    'സ്ഥാപയം',
-    'നേതവം',
-    'ഭവനം',
-    'കായികം',
-  ];
+  const filterTags = Object.entries(
+    departments.flatMap(dept => dept.achievements.flatMap(a => a.tags))
+      .reduce<Record<string, number>>((acc, tag) => {
+        acc[tag] = (acc[tag] ?? 0) + 1;
+        return acc;
+      }, {})
+  )
+    .sort((a, b) => b[1] - a[1])
+    .map(([tag]) => tag);
 
   // Toggle tag selection
   const toggleTag = (tag: string) => {
@@ -392,19 +65,9 @@ export default function App() {
   };
 
   // Filter departments based on active category
-  const filteredDepartments = activeCategory === 'എല്ലാം (All)' 
-    ? departments 
-    : departments.filter(dept => {
-        const categoryMap: Record<string, string> = {
-          '🏥 ആരോഗ്യ വകുപ്പ്': 'health',
-          '🎓 സാമൂഹ്യ വകുപ്പ്': 'education',
-          '🏛️ ക്ഷേമ വകുപ്പ്': 'welfare',
-          '💰 പേയ്മെന്റ്സ് വകുപ്പ്': 'finance',
-          '⚡ കോൺഫിൽ വകുപ്പ്': 'other',
-          '🌾 ആരോഗ്യ വകുപ്പ്': 'agriculture',
-        };
-        return dept.id === categoryMap[activeCategory];
-      });
+  const filteredDepartments = activeCategory === 'all'
+    ? departments
+    : departments.filter(dept => dept.id === activeCategory);
 
   // Filter achievements based on selected tags (OR logic) and search query
   const getFilteredAchievements = (achievements: Achievement[]) => {
@@ -442,14 +105,14 @@ export default function App() {
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(cat.label)}
+                onClick={() => setActiveCategory(cat.id)}
                 className={`px-5 py-2.5 rounded-lg font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
-                  activeCategory === cat.label
+                  activeCategory === cat.id
                     ? 'bg-amber-400 text-gray-900 shadow-lg scale-105'
                     : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border border-white/20'
                 }`}
               >
-                <span>{cat.label}</span>
+                <span>{cat.icon} {cat.label}</span>
               </button>
             ))}
           </div>

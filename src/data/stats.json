@@ -1,0 +1,8 @@
+[
+  { "label": "വകുപ്പുകൾ", "value": "6", "color": "from-emerald-500 to-emerald-600" },
+  { "label": "നേട്ടങ്ങൾ", "value": "80+", "color": "from-blue-500 to-blue-600" },
+  { "label": "വിവേദ്യന്ന്", "value": "₹5,000Cr+", "color": "from-orange-500 to-orange-600" },
+  { "label": "സാമന്തു ചിലേഷ്മു", "value": "₹7,708Cr", "color": "from-purple-500 to-purple-600" },
+  { "label": "ദേശീയ പുനസ്ഥാപനങ്ങൾ", "value": "32", "color": "from-pink-500 to-pink-600" },
+  { "label": "തൊഴിലാസനങ്ങൾ", "value": "5L+", "color": "from-teal-500 to-teal-600" }
+]
