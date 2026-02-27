@@ -8,13 +8,12 @@ interface Achievement {
   title: string;
   description: string;
   tags: string[];
-  highlighted?: boolean;
   mediaType?: 'image' | 'video';
   mediaUrl?: string;
   detailedReport?: {
     fullDescription: string;
     statistics: { label: string; value: string }[];
-    links: string[];
+    links: { label: string; url: string }[];
     additionalInfo: string[];
   };
 }
@@ -79,7 +78,7 @@ export default function App() {
       parts.push(achievement.detailedReport.additionalInfo.map(i => `✓ ${i}`).join('\n'));
     }
     if (achievement.detailedReport?.links?.length) {
-      parts.push(achievement.detailedReport.links.join('\n'));
+      parts.push(achievement.detailedReport.links.map(l => `${l.label}: ${l.url}`).join('\n'));
     }
     return parts.join('\n\n');
   };
@@ -265,9 +264,9 @@ export default function App() {
                   <div className="flex items-center gap-3">
                     <button 
                       onClick={() => setSelectedAchievement(achievement)}
-                      className="flex-1 text-emerald-600 hover:text-emerald-700 text-sm font-semibold flex items-center justify-center gap-1 group"
+                      className="flex-1 text-emerald-600 hover:text-emerald-700 text-sm font-semibold flex items-center justify-start gap-1 group"
                     >
-                      വിശദമായി വായിക്കുക (Read More)
+                      വിശദമായി വായിക്കുക
                       <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                     </button>
                     <button 
@@ -400,12 +399,12 @@ export default function App() {
                         {selectedAchievement.detailedReport.links.map((link, idx) => (
                           <a
                             key={idx}
-                            href={link}
+                            href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-all flex items-center gap-2 font-medium shadow-md"
                           >
-                            {link}
+                            {link.label}
                             <ExternalLink className="w-4 h-4" />
                           </a>
                         ))}
