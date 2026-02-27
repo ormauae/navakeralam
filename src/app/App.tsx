@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, CheckCircle2, X, ExternalLink, Play, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, CheckCircle2, X, ExternalLink, Play, ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react';
 import departmentsData from '@/data/departments.json';
 import statsData from '@/data/stats.json';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -39,6 +39,7 @@ export default function App() {
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(new Set());
+  const [isDeptSheetOpen, setIsDeptSheetOpen] = useState(false);
 
   const PAGE_SIZE = 9;
 
@@ -172,22 +173,27 @@ export default function App() {
             </div>
           </div>
 
-          {/* Category Tabs */}
-          <div className="mt-8 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-sm ${
-                  activeCategory === cat.id
-                    ? 'bg-amber-400 text-gray-900 shadow-lg shadow-amber-500/30 scale-105'
-                    : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border border-white/15 hover:scale-105'
-                }`}
-              >
-                <span>{cat.icon}</span>
-                <span>{cat.label}</span>
-              </button>
-            ))}
+          {/* Department filter button — all screen sizes */}
+          <div className="mt-6">
+            <button
+              onClick={() => setIsDeptSheetOpen(true)}
+              className="w-full flex items-center justify-between px-4 py-3 bg-white/10 hover:bg-white/15 backdrop-blur-sm rounded-xl border border-white/20 transition-all duration-200"
+            >
+              <div className="flex items-center gap-2.5">
+                <SlidersHorizontal className="w-4 h-4 text-white/70" />
+                <span className="font-medium text-sm">
+                  {activeCategory === 'all'
+                    ? 'എല്ലാ വകുപ്പുകളും'
+                    : categories.find(c => c.id === activeCategory)?.icon + ' ' + categories.find(c => c.id === activeCategory)?.label}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                {activeCategory !== 'all' && (
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                )}
+                <ChevronDown className="w-4 h-4 text-white/70" />
+              </div>
+            </button>
           </div>
         </div>
       </header>
@@ -522,7 +528,6 @@ export default function App() {
                       <Dialog.Title className="text-2xl sm:text-3xl font-bold">
                         {selectedDepartment.name}
                       </Dialog.Title>
-                      <p className="text-white/80 mt-1 text-sm">{selectedDepartment.achievements.length} നേട്ടങ്ങൾ</p>
                     </div>
                   </div>
                 </div>
@@ -599,6 +604,65 @@ export default function App() {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
+
+      {/* Department bottom sheet */}
+      <div className={`fixed inset-0 z-50 transition-all duration-300 ${isDeptSheetOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isDeptSheetOpen ? 'opacity-100' : 'opacity-0'}`}
+          onClick={() => setIsDeptSheetOpen(false)}
+        />
+        {/* Sheet — full-width on mobile, centered panel on desktop */}
+        <div className={`absolute bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:max-w-3xl md:rounded-t-2xl bg-white rounded-t-2xl transition-transform duration-300 ease-out ${isDeptSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+          {/* Handle */}
+          <div className="flex justify-center pt-3 pb-1">
+            <div className="w-10 h-1 bg-gray-300 rounded-full" />
+          </div>
+
+          {/* Sheet header */}
+          <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
+            <h2 className="text-lg font-bold text-gray-800">വകുപ്പ് തിരഞ്ഞെടുക്കുക</h2>
+            <button
+              onClick={() => setIsDeptSheetOpen(false)}
+              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+            >
+              <X className="w-4 h-4 text-gray-600" />
+            </button>
+          </div>
+
+          {/* Department grid */}
+          <div className="p-4 grid grid-cols-2 md:grid-cols-3 gap-3 max-h-[65vh] overflow-y-auto pb-8">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => { setActiveCategory(cat.id); setIsDeptSheetOpen(false); }}
+                  className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all duration-200 ${
+                    isActive
+                      ? 'border-emerald-500 bg-emerald-50 shadow-md shadow-emerald-100'
+                      : 'border-gray-100 bg-gray-50 hover:border-emerald-200 hover:bg-emerald-50/50'
+                  }`}
+                >
+                  <span className="text-2xl flex-shrink-0">{cat.icon}</span>
+                  <div className="min-w-0">
+                    <p className={`text-sm font-semibold leading-tight truncate ${isActive ? 'text-emerald-700' : 'text-gray-800'}`}>
+                      {cat.label}
+                    </p>
+                  </div>
+                  {isActive && (
+                    <span className="ml-auto flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
