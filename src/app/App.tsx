@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Share2, Download, Search, CheckCircle2, Building2, X, ExternalLink, Play } from 'lucide-react';
+import { Search, CheckCircle2, Building2, X, ExternalLink, Play } from 'lucide-react';
 import departmentsData from '@/data/departments.json';
 import statsData from '@/data/stats.json';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -14,7 +14,7 @@ interface Achievement {
   detailedReport?: {
     fullDescription: string;
     statistics: { label: string; value: string }[];
-    links: { label: string; url: string }[];
+    links: string[];
     additionalInfo: string[];
   };
 }
@@ -79,7 +79,7 @@ export default function App() {
       parts.push(achievement.detailedReport.additionalInfo.map(i => `✓ ${i}`).join('\n'));
     }
     if (achievement.detailedReport?.links?.length) {
-      parts.push(achievement.detailedReport.links.map(l => l.url).join('\n'));
+      parts.push(achievement.detailedReport.links.join('\n'));
     }
     return parts.join('\n\n');
   };
@@ -400,12 +400,12 @@ export default function App() {
                         {selectedAchievement.detailedReport.links.map((link, idx) => (
                           <a
                             key={idx}
-                            href={link.url}
+                            href={link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-all flex items-center gap-2 font-medium shadow-md"
                           >
-                            {link.label}
+                            {link}
                             <ExternalLink className="w-4 h-4" />
                           </a>
                         ))}
