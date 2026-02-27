@@ -102,19 +102,71 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
 
       {/* Header */}
-      <header className="bg-gradient-to-r from-emerald-900 via-emerald-700 to-teal-700 text-white shadow-2xl relative overflow-hidden">
-        {/* Decorative blobs */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-teal-400/20 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-72 h-72 bg-emerald-300/20 rounded-full translate-y-1/2 blur-3xl pointer-events-none" />
+      <header className="relative text-white shadow-2xl overflow-hidden" style={{background: 'linear-gradient(135deg, #022c22 0%, #064e3b 30%, #065f46 60%, #0f766e 100%)'}}>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Warm sun glow top-center */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-64 bg-amber-400/10 rounded-full -translate-y-1/2 blur-3xl pointer-events-none" />
+        {/* Teal shimmer bottom-left */}
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-300/15 rounded-full translate-y-1/2 -translate-x-1/4 blur-3xl pointer-events-none" />
+
+        {/* Palm tree silhouettes */}
+        <div className="absolute bottom-0 right-0 flex items-end gap-2 pr-6 opacity-[0.12] pointer-events-none select-none">
+          {/* Short palm */}
+          <svg width="70" height="110" viewBox="0 0 70 110" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 110 C31 95 29 78 30 62 C31 46 33 36 35 26 C37 36 39 46 40 62 C41 78 39 95 37 110Z"/>
+            <path d="M35 28 C22 22 8 26 0 20 C12 13 27 20 35 26"/>
+            <path d="M35 28 C48 22 62 26 70 20 C58 13 43 20 35 26"/>
+            <path d="M35 28 C20 16 18 4 24 0 C27 10 31 20 35 26"/>
+            <path d="M35 28 C50 16 52 4 46 0 C43 10 39 20 35 26"/>
+            <path d="M35 28 C32 12 34 2 35 0 C36 4 37 14 35 26"/>
+            <ellipse cx="33" cy="29" rx="3" ry="2.5"/>
+            <ellipse cx="38" cy="31" rx="3" ry="2.5"/>
+          </svg>
+          {/* Tall palm */}
+          <svg width="80" height="150" viewBox="0 0 80 150" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M38 150 C36 130 33 108 34 88 C35 68 37 52 40 38 C43 52 45 68 46 88 C47 108 44 130 42 150Z"/>
+            <path d="M40 40 C25 32 8 36 0 28 C14 20 30 28 40 38"/>
+            <path d="M40 40 C55 32 72 36 80 28 C66 20 50 28 40 38"/>
+            <path d="M40 40 C24 26 21 10 28 5 C31 18 36 30 40 38"/>
+            <path d="M40 40 C56 26 59 10 52 5 C49 18 44 30 40 38"/>
+            <path d="M40 40 C36 20 38 5 40 0 C42 6 43 22 40 38"/>
+            <path d="M40 40 C28 30 20 18 22 10 C28 20 35 32 40 38"/>
+            <path d="M40 40 C52 30 60 18 58 10 C52 20 45 32 40 38"/>
+            <ellipse cx="38" cy="41" rx="4" ry="3"/>
+            <ellipse cx="44" cy="43" rx="4" ry="3"/>
+            <ellipse cx="40" cy="46" rx="3.5" ry="2.5"/>
+          </svg>
+          {/* Medium palm */}
+          <svg width="60" height="120" viewBox="0 0 60 120" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28 120 C26 104 24 86 25 70 C26 54 28 42 30 30 C32 42 34 54 35 70 C36 86 34 104 32 120Z"/>
+            <path d="M30 32 C18 26 5 30 0 23 C11 16 25 23 30 30"/>
+            <path d="M30 32 C42 26 55 30 60 23 C49 16 35 23 30 30"/>
+            <path d="M30 32 C16 20 14 7 20 2 C23 13 27 23 30 30"/>
+            <path d="M30 32 C44 20 46 7 40 2 C37 13 33 23 30 30"/>
+            <path d="M30 32 C27 16 29 4 30 0 C31 5 32 18 30 30"/>
+            <ellipse cx="28" cy="33" rx="3" ry="2.5"/>
+            <ellipse cx="33" cy="35" rx="3" ry="2.5"/>
+          </svg>
+        </div>
+
+        {/* Subtle horizontal light rays */}
+        <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(ellipse at 15% 50%, rgba(251,191,36,0.06) 0%, transparent 60%)'}} />
+
+        {/* Bottom wave */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+          <svg viewBox="0 0 1440 28" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 28 Q180 8 360 18 Q540 28 720 14 Q900 0 1080 12 Q1260 24 1440 8 L1440 28 Z" fill="rgba(255,255,255,0.04)"/>
+          </svg>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
               <div className="flex items-start gap-3">
                 <span className="text-4xl sm:text-5xl mt-1">🌴</span>
                 <div>
-                  <h1 className="text-4xl sm:text-6xl font-bold mb-1">നവകേരളം</h1>
-                  <p className="text-emerald-200 text-base">നാടിന്റെ മുഖച്ഛായ മാറ്റിയ 10 വർഷങ്ങൾ</p>
+                  <h1 className="text-4xl sm:text-6xl font-bold mb-1 tracking-tight">നവകേരളം</h1>
+                  <p className="text-emerald-300/80 text-base">നാടിന്റെ മുഖച്ഛായ മാറ്റിയ 10 വർഷങ്ങൾ</p>
                 </div>
               </div>
             </div>
