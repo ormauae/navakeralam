@@ -12,6 +12,8 @@
           "ആരോഗ്യം",
           "വിദ്യാഭ്യാസം"
         ],
+        "mediaType": "image",
+        "mediaUrl": "https://scontent.ffjr1-5.fna.fbcdn.net/v/t39.30808-6/599942245_1406139187543857_2893530651696946172_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_ohc=fDCjlfHRbWgQ7kNvwFK2FG2&_nc_oc=Adk5mkfCoSjCdbt58Ebo-cEWJji_KTk25DvHXJ2_-r9bMHWf0FbmDtr9Gwt7-fNkrvI&_nc_zt=23&_nc_ht=scontent.ffjr1-5.fna&_nc_gid=IHhMGzD2SR0JD1HavQpJzg&oh=00_AfteS3b0tiKMjG9jK4-tNLpiEbEQnTzsz8XnBJrJRILNpA&oe=69A7841B",
         "detailedReport": {
           "fullDescription": "കോന്നി (പത്തനംതിട്ട), ഇടുക്കി, വയനാട്, കാസർഗോഡ് ജില്ലകളിൽ 4 പുതിയ ഗവൺമെൻ്റ് മെഡിക്കൽ കോളേജുകൾ സ്ഥാപിച്ചതോടെ കേരളത്തിലെ ഓരോ ജില്ലയിലും മെഡിക്കൽ കോളേജ് എന്ന ചരിത്ര നേട്ടം കൈവരിച്ചു. ഒപ്പം 21 ഗവൺമെൻ്റ് നഴ്സിങ്ങ് കോളേജുകൾ ആരംഭിച്ചു. BSc Nursing-ലെ സർക്കാർ സീറ്റുകൾ 478-ൽ നിന്ന് 1060-ആക്കി ഉയർത്തി - ആരോഗ്യ മേഖലയിലെ മാനവ വിഭവ ശേഷി ഗണ്യമായി വർദ്ധിപ്പിക്കുന്ന ഈ നടപടി ദൂരവ്യാപക ഫലങ്ങൾ ഉളവാക്കും.",
           "statistics": [
@@ -41,11 +43,13 @@
         }
       },
       {
-        "title": "സൗജന്യ ചികിത്സ - ₹7708 കോടി; KASP, KBF, KSSCL",
+        "title": "സൗജന്യ ചികിത്സ - ₹7708 കോടി",
         "description": "4 വർഷം 25.17 ലക്ഷം ആളുകൾക്ക് ₹7708 കോടിയുടെ സൗജന്യ ചികിത്സ. KASP: 24.06 ലക്ഷം ₹7163 കോടി; KBF: 64,075 ഗുണഭോക്താക്കൾ ₹544 കോടി; KSSCL: ₹3300 കോടി+ സൗജന്യ മരുന്ന്; ക്യാൻസർ ₹1400 കോടി",
         "tags": [
           "ആരോഗ്യം"
         ],
+        "mediaType": "image",
+        "mediaUrl": "https://scontent.ffjr8-1.fna.fbcdn.net/v/t39.30808-6/580053558_1380911913399918_6496049914458751308_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=7b2446&_nc_ohc=U7j4RcvvnU8Q7kNvwF19_In&_nc_oc=Adlr_tRDOrjqXs0CNEoOiYlJdFsf-sAcVeFJJDTkJm6tATFfbSRDSbK3I4R0WETP32U&_nc_zt=23&_nc_ht=scontent.ffjr8-1.fna&_nc_gid=ufmBM_FtQmFNs_3hymHdAQ&_nc_ss=8&oh=00_Afvc1QtowgPGGTrr30GPTvg31RV7mjDnfnhacI8evwFMlQ&oe=69A7A27E",
         "detailedReport": {
           "fullDescription": "കേരള ആരോഗ്യ സംരക്ഷണ പദ്ധതി (KASP) വഴി 4 വർഷത്തിനിടെ 24.06 ലക്ഷം ആളുകൾക്ക് ₹7163 കോടിയുടെ സൗജന്യ ചികിത്സ നൽകി. കാരുണ്യ ബെനവലൻ്റ് ഫണ്ട് (KBF) വഴി 64,075 ഗുണഭോക്താക്കൾക്ക് ₹544 കോടി. KSSCL വഴി ₹3300 കോടിലധികം വിലമതിക്കുന്ന സൗജന്യ മരുന്നുകൾ. ക്യാൻസർ ചികിത്സയ്ക്ക് ₹1400 കോടി. ആകെ 4 വർഷം 25.17 ലക്ഷം ആളുകൾക്ക് ₹7708 കോടിയുടെ ആനുകൂല്യം.",
           "statistics": [
@@ -92,11 +96,13 @@
         }
       },
       {
-        "title": "5415 ജനകീയ ആരോഗ്യ കേന്ദ്രം & 7890 ആരോഗ്യ സ്ഥാപനങ്ങൾ",
+        "title": "5415 ജനകീയ ആരോഗ്യ കേന്ദ്രം; 7890 ആരോഗ്യ സ്ഥാപനങ്ങൾ",
         "description": "5415 ജനകീയ ആരോഗ്യ കേന്ദ്രം (JHC), 380 നഗര JHC, 75 കാരുണ്യ ഫാർമസി, 854 ഫ്രീ മരുന്ന് കൗണ്ടർ - ആകെ 7890 ആരോഗ്യ സ്ഥാപനങ്ങൾ",
         "tags": [
           "ആരോഗ്യം"
         ],
+        "mediaType": "image",
+        "mediaUrl": "https://scontent.ffjr1-5.fna.fbcdn.net/v/t39.30808-6/599942245_1406139187543857_2893530651696946172_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_ohc=fDCjlfHRbWgQ7kNvwFK2FG2&_nc_oc=Adk5mkfCoSjCdbt58Ebo-cEWJji_KTk25DvHXJ2_-r9bMHWf0FbmDtr9Gwt7-fNkrvI&_nc_zt=23&_nc_ht=scontent.ffjr1-5.fna&_nc_gid=IHhMGzD2SR0JD1HavQpJzg&oh=00_AfteS3b0tiKMjG9jK4-tNLpiEbEQnTzsz8XnBJrJRILNpA&oe=69A7841B",
         "detailedReport": {
           "fullDescription": "ഗ്രാമീണ, നഗര മേഖലകളിൽ ആരോഗ്യ സേവനം ജനങ്ങളുടെ അടുത്ത് എത്തിക്കാൻ 5415 ജനകീയ ആരോഗ്യ കേന്ദ്രങ്ങൾ (JHC) സ്ഥാപിച്ചു. 380 നഗര ജനകീയ ആരോഗ്യ കേന്ദ്രങ്ങളും ആരംഭിച്ചു. ന്യായ വിലയ്ക്ക് മരുന്ന് ലഭ്യമാക്കാൻ 75 കാരുണ്യ ഫാർമസികൾ, 854 സൗജന്യ മരുന്ന് കൗണ്ടറുകൾ. ആകെ 7890 ആരോഗ്യ സ്ഥാപനങ്ങൾ സജീവമായി പ്രവർത്തിക്കുന്നു - ഇത് കേരളത്തിൻ്റെ ആരോഗ്യ അടിസ്ഥാന സൗകര്യ ശൃംഖലയ്ക്ക് കരുത്ത് പകരുന്നു.",
           "statistics": [
