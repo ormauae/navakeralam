@@ -5,11 +5,9 @@ import statsData from '@/data/stats.json';
 import * as Dialog from '@radix-ui/react-dialog';
 
 interface Achievement {
-  id: string;
   title: string;
   description: string;
   tags: string[];
-  icon: string;
   highlighted?: boolean;
   mediaType?: 'image' | 'video';
   mediaUrl?: string;
@@ -35,6 +33,9 @@ export default function App() {
   const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(new Set());
+
+  const PAGE_SIZE = 9;
 
   const departments: Department[] = departmentsData as Department[];
 
@@ -68,6 +69,20 @@ export default function App() {
   const filteredDepartments = activeCategory === 'all'
     ? departments
     : departments.filter(dept => dept.id === activeCategory);
+
+  const buildShareText = (achievement: Achievement) => {
+    const parts = [achievement.title, achievement.detailedReport?.fullDescription || achievement.description];
+    if (achievement.detailedReport?.statistics?.length) {
+      parts.push(achievement.detailedReport.statistics.map(s => `• ${s.label}: ${s.value}`).join('\n'));
+    }
+    if (achievement.detailedReport?.additionalInfo?.length) {
+      parts.push(achievement.detailedReport.additionalInfo.map(i => `✓ ${i}`).join('\n'));
+    }
+    if (achievement.detailedReport?.links?.length) {
+      parts.push(achievement.detailedReport.links.map(l => l.url).join('\n'));
+    }
+    return parts.join('\n\n');
+  };
 
   // Filter achievements based on selected tags (OR logic) and search query
   const getFilteredAchievements = (achievements: Achievement[]) => {
@@ -173,10 +188,14 @@ export default function App() {
       {/* Departments Sections */}
       {filteredDepartments.map((department) => {
         const filteredAchievements = getFilteredAchievements(department.achievements);
-        
+
         // Don't show department if no achievements match the filters
         if (filteredAchievements.length === 0) return null;
-        
+
+        const isExpanded = expandedDepartments.has(department.id);
+        const visibleAchievements = isExpanded ? filteredAchievements : filteredAchievements.slice(0, PAGE_SIZE);
+        const hasMore = filteredAchievements.length > PAGE_SIZE;
+
         return (
           <section key={department.id} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
@@ -186,7 +205,7 @@ export default function App() {
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">{department.name}</h2>
               </div>
-              <button 
+              <button
                 onClick={() => setSelectedDepartment(department)}
                 className="px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all flex items-center gap-2 font-medium shadow-lg"
               >
@@ -198,9 +217,9 @@ export default function App() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredAchievements.map((achievement) => (
+              {visibleAchievements.map((achievement, idx) => (
               <div
-                key={achievement.id}
+                key={idx}
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all border-2 border-gray-100 hover:border-emerald-200 overflow-hidden"
               >
                 {/* Media Section */}
@@ -254,8 +273,7 @@ export default function App() {
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
-                        const text = `${achievement.title}\n\n${achievement.description}\n\nകേരള സർക്കാർ നേട്ടങ്ങൾ`;
-                        const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                        const url = `https://wa.me/?text=${encodeURIComponent(buildShareText(achievement))}`;
                         window.open(url, '_blank');
                       }}
                       className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all flex items-center gap-1.5 shadow-md"
@@ -269,6 +287,23 @@ export default function App() {
               </div>
             ))}
           </div>
+
+          {hasMore && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={() => setExpandedDepartments(prev => {
+                  const next = new Set(prev);
+                  isExpanded ? next.delete(department.id) : next.add(department.id);
+                  return next;
+                })}
+                className="px-6 py-3 bg-white border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 rounded-lg font-medium transition-all shadow-sm"
+              >
+                {isExpanded
+                  ? 'Show Less'
+                  : 'View More'}
+              </button>
+            </div>
+          )}
         </section>
       );
       })}
@@ -382,8 +417,7 @@ export default function App() {
                   <div className="pt-4 border-t border-gray-200">
                     <button
                       onClick={() => {
-                        const text = `${selectedAchievement.title}\n\n${selectedAchievement.detailedReport?.fullDescription || selectedAchievement.description}\n\nകേരള സർക്കാർ നേട്ടങ്ങൾ`;
-                        const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                        const url = `https://wa.me/?text=${encodeURIComponent(buildShareText(selectedAchievement))}`;
                         window.open(url, '_blank');
                       }}
                       className="w-full px-5 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all flex items-center justify-center gap-2 font-medium shadow-lg"
@@ -432,7 +466,7 @@ export default function App() {
                 <div className="p-6 sm:p-8">
                   <div className="prose prose-lg max-w-none">
                     {selectedDepartment.achievements.map((achievement, idx) => (
-                      <div key={achievement.id} className="mb-8 pb-8 border-b border-gray-200 last:border-0">
+                      <div key={idx} className="mb-8 pb-8 border-b border-gray-200 last:border-0">
                         <div className="flex items-start gap-4 mb-4">
                           <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0 shadow-md">
                             {idx + 1}
@@ -490,9 +524,9 @@ export default function App() {
                     <button
                       onClick={() => {
                         const achievementsList = selectedDepartment.achievements
-                          .map((ach, idx) => `${idx + 1}. ${ach.title}\n   ${ach.detailedReport?.fullDescription || ach.description}`)
-                          .join('\n\n');
-                        const text = `${selectedDepartment.name}\n\n${achievementsList}\n\nകേരള സർക്കാർ നേട്ടങ്ങൾ`;
+                          .map((ach, idx) => `${idx + 1}. ${buildShareText(ach)}`)
+                          .join('\n\n---\n\n');
+                        const text = `${selectedDepartment.name}\n\n${achievementsList}`;
                         const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
                         window.open(url, '_blank');
                       }}
