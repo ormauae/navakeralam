@@ -40,6 +40,7 @@ export default function App() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(new Set());
   const [isDeptSheetOpen, setIsDeptSheetOpen] = useState(false);
+  const [isTagsExpanded, setIsTagsExpanded] = useState(false);
 
   const PAGE_SIZE = 9;
 
@@ -223,43 +224,95 @@ export default function App() {
       {/* Search and Filters */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
-          {/* Search Bar */}
-          <div className="relative mb-5">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="തിരയുക..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-10 py-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none text-gray-700 placeholder-gray-400 transition-all duration-200 focus:shadow-lg"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
-              >
-                <X className="w-3.5 h-3.5 text-gray-600" />
-              </button>
-            )}
+          {/* Search Bar + Filter toggle */}
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="തിരയുക..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-10 py-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none text-gray-700 placeholder-gray-400 transition-all duration-200 focus:shadow-lg"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-3.5 h-3.5 text-gray-600" />
+                </button>
+              )}
+            </div>
+
+            <button
+              onClick={() => setIsTagsExpanded(p => !p)}
+              className={`relative px-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+                isTagsExpanded || selectedTags.length > 0
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-600'
+                  : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-emerald-300 hover:text-emerald-600'
+              }`}
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+              {selectedTags.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {selectedTags.length}
+                </span>
+              )}
+            </button>
           </div>
 
-          {/* Filter Tags */}
-          <div className="flex flex-wrap gap-2">
-            {filterTags.map((tag) => (
+          {/* Selected chips — visible when collapsed */}
+          {selectedTags.length > 0 && !isTagsExpanded && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {selectedTags.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className="px-3 py-1 bg-emerald-500 text-white rounded-full text-xs font-medium flex items-center gap-1 shadow-sm"
+                >
+                  {tag}
+                  <X className="w-3 h-3" />
+                </button>
+              ))}
               <button
-                key={tag}
-                onClick={() => toggleTag(tag)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border flex items-center gap-1.5 ${
-                  selectedTags.includes(tag)
-                    ? 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-200 scale-105'
-                    : 'bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 text-gray-600 border-gray-200 hover:border-emerald-300 hover:scale-105'
-                }`}
+                onClick={() => setSelectedTags([])}
+                className="px-3 py-1 text-xs text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1"
               >
-                {selectedTags.includes(tag) && <span className="text-xs leading-none">✓</span>}
-                {tag}
+                <X className="w-3 h-3" /> Clear all
               </button>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* All tags — expanded */}
+          {isTagsExpanded && (
+            <div className="mt-3">
+              <div className="flex flex-wrap gap-2">
+                {filterTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border flex items-center gap-1.5 ${
+                      selectedTags.includes(tag)
+                        ? 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-200 scale-105'
+                        : 'bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 text-gray-600 border-gray-200 hover:border-emerald-300 hover:scale-105'
+                    }`}
+                  >
+                    {selectedTags.includes(tag) && <span className="text-xs leading-none">✓</span>}
+                    {tag}
+                  </button>
+                ))}
+              </div>
+              {selectedTags.length > 0 && (
+                <button
+                  onClick={() => setSelectedTags([])}
+                  className="mt-3 text-xs text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1"
+                >
+                  <X className="w-3 h-3" /> Clear all
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
