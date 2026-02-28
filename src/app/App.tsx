@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, CheckCircle2, X, ExternalLink, Play, ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react';
+import { Search, CheckCircle2, X, ExternalLink, Play, ChevronDown, ChevronUp, SlidersHorizontal, Building2 } from 'lucide-react';
 import departmentsData from '@/data/departments.json';
 import statsData from '@/data/stats.json';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -174,28 +174,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Department filter button — all screen sizes */}
-          <div className="mt-6">
-            <button
-              onClick={() => setIsDeptSheetOpen(true)}
-              className="w-full flex items-center justify-between px-4 py-3 bg-white/10 hover:bg-white/15 backdrop-blur-sm rounded-xl border border-white/20 transition-all duration-200"
-            >
-              <div className="flex items-center gap-2.5">
-                <SlidersHorizontal className="w-4 h-4 text-white/70" />
-                <span className="font-medium text-sm">
-                  {activeCategory === 'all'
-                    ? 'എല്ലാ വകുപ്പുകളും'
-                    : categories.find(c => c.id === activeCategory)?.icon + ' ' + categories.find(c => c.id === activeCategory)?.label}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                {activeCategory !== 'all' && (
-                  <span className="w-2 h-2 rounded-full bg-amber-400" />
-                )}
-                <ChevronDown className="w-4 h-4 text-white/70" />
-              </div>
-            </button>
-          </div>
         </div>
       </header>
 
@@ -224,7 +202,7 @@ export default function App() {
       {/* Search and Filters */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
-          {/* Search Bar + Filter toggle */}
+          {/* Search Bar + Filter buttons */}
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -245,6 +223,25 @@ export default function App() {
               )}
             </div>
 
+            {/* Department filter icon */}
+            <button
+              onClick={() => setIsDeptSheetOpen(true)}
+              className={`relative px-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+                activeCategory !== 'all'
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-600'
+                  : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-emerald-300 hover:text-emerald-600'
+              }`}
+            >
+              {activeCategory !== 'all'
+                ? <span className="text-lg leading-none">{categories.find(c => c.id === activeCategory)?.icon}</span>
+                : <Building2 className="w-5 h-5" />
+              }
+              {activeCategory !== 'all' && (
+                <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-amber-400 rounded-full border-2 border-white" />
+              )}
+            </button>
+
+            {/* Tags filter icon */}
             <button
               onClick={() => setIsTagsExpanded(p => !p)}
               className={`relative px-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
@@ -262,7 +259,26 @@ export default function App() {
             </button>
           </div>
 
-          {/* Selected chips — visible when collapsed */}
+          {/* Active department chip */}
+          {activeCategory !== 'all' && (
+            <div className="flex items-center gap-2 mt-3">
+              <button
+                onClick={() => setIsDeptSheetOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500 text-white rounded-full text-xs font-medium shadow-sm"
+              >
+                <span>{categories.find(c => c.id === activeCategory)?.icon}</span>
+                <span>{categories.find(c => c.id === activeCategory)?.label}</span>
+              </button>
+              <button
+                onClick={() => setActiveCategory('all')}
+                className="w-5 h-5 rounded-full bg-gray-200 hover:bg-red-100 hover:text-red-500 flex items-center justify-center transition-colors"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )}
+
+          {/* Selected tag chips — visible when collapsed */}
           {selectedTags.length > 0 && !isTagsExpanded && (
             <div className="flex flex-wrap gap-1.5 mt-3">
               {selectedTags.map(tag => (
