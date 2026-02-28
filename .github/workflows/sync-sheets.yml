@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,12 +23,26 @@ jobs:
       - name: Sync data from Google Sheets
         env:
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          DEPARTMENTS_GID: ${{ secrets.DEPARTMENTS_GID }}
+          ACHIEVEMENTS_GID: ${{ secrets.ACHIEVEMENTS_GID }}
         run: python scripts/sync_from_sheets.py
 
       - name: Commit and push if changed
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/data/departments.json
-          git diff --staged --quiet || git commit -m "chore: sync departments from Google Sheets"
-          git push
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "chore: sync departments from Google Sheets"
+            git push
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger deploy
+        if: steps.commit.outputs.changed == 'true'
+        run: gh workflow run deploy.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
