@@ -204,13 +204,17 @@ export default function App() {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 group relative overflow-hidden"
+              className={`${(stat as {bg?: string}).bg} rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-white group relative overflow-hidden`}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent to-emerald-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className={`text-3xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1`}>
+              <div className="flex items-start justify-between mb-3">
+                <div className={`w-10 h-10 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center text-xl shadow-md`}>
+                  {(stat as { icon?: string }).icon}
+                </div>
+              </div>
+              <div className={`text-2xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1 leading-tight`}>
                 {stat.value}
               </div>
-              <div className="text-xs text-gray-500 font-medium">{stat.label}</div>
+              <div className="text-xs text-gray-500 font-medium leading-snug">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -382,7 +386,7 @@ export default function App() {
                   {isExpanded ? (
                     <><ChevronUp className="w-4 h-4" />Show Less</>
                   ) : (
-                    <><ChevronDown className="w-4 h-4" />View {filteredAchievements.length - PAGE_SIZE} More</>
+                    <><ChevronDown className="w-4 h-4" />View More</>
                   )}
                 </button>
               </div>
@@ -458,9 +462,9 @@ export default function App() {
                         <span className="w-1 h-5 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full inline-block" />
                         കൂടുതൽ വിവരങ്ങൾ
                       </h3>
-                      <ul className="space-y-3">
+                      <ul className="space-y-1">
                         {selectedAchievement.detailedReport.additionalInfo.map((info, idx) => (
-                          <li key={idx} className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                          <li key={idx} className="flex items-start gap-3 p-2 rounded-xl hover:bg-gray-50 transition-colors">
                             <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                             <span className="text-gray-700 text-sm leading-relaxed">{info}</span>
                           </li>
