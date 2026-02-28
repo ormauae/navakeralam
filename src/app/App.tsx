@@ -223,19 +223,26 @@ export default function App() {
               )}
             </div>
 
-            {/* Department filter icon */}
+            {/* Department filter button */}
             <button
               onClick={() => setIsDeptSheetOpen(true)}
-              className={`relative px-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+              className={`relative flex items-center gap-2 px-4 rounded-xl border-2 transition-all duration-200 flex-shrink-0 ${
                 activeCategory !== 'all'
-                  ? 'border-emerald-500 bg-emerald-50 text-emerald-600'
-                  : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-emerald-300 hover:text-emerald-600'
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                  : 'border-gray-200 bg-gray-50 text-gray-500 hover:border-emerald-300 hover:text-emerald-600'
               }`}
             >
-              {activeCategory !== 'all'
-                ? <span className="text-lg leading-none">{categories.find(c => c.id === activeCategory)?.icon}</span>
-                : <Building2 className="w-5 h-5" />
-              }
+              <span className="text-base leading-none">
+                {activeCategory !== 'all'
+                  ? categories.find(c => c.id === activeCategory)?.icon
+                  : <Building2 className="w-4 h-4" />}
+              </span>
+              <span className="hidden sm:inline text-sm font-medium whitespace-nowrap">
+                {activeCategory !== 'all'
+                  ? categories.find(c => c.id === activeCategory)?.label
+                  : 'വകുപ്പ്'}
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 opacity-50" />
               {activeCategory !== 'all' && (
                 <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-amber-400 rounded-full border-2 border-white" />
               )}
@@ -259,24 +266,6 @@ export default function App() {
             </button>
           </div>
 
-          {/* Active department chip */}
-          {activeCategory !== 'all' && (
-            <div className="flex items-center gap-2 mt-3">
-              <button
-                onClick={() => setIsDeptSheetOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500 text-white rounded-full text-xs font-medium shadow-sm"
-              >
-                <span>{categories.find(c => c.id === activeCategory)?.icon}</span>
-                <span>{categories.find(c => c.id === activeCategory)?.label}</span>
-              </button>
-              <button
-                onClick={() => setActiveCategory('all')}
-                className="w-5 h-5 rounded-full bg-gray-200 hover:bg-red-100 hover:text-red-500 flex items-center justify-center transition-colors"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            </div>
-          )}
 
           {/* Selected tag chips — visible when collapsed */}
           {selectedTags.length > 0 && !isTagsExpanded && (
